@@ -1,6 +1,6 @@
 [submodule "wine"]
 	path = wine
-	url = https://github.com/AndreRH/wine.git
+	url = https://github.com/mikugirls/wine.git
 	branch = arm64ec
 [submodule "fex"]
 	path = fex
