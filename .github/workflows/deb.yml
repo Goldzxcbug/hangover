@@ -280,7 +280,7 @@ jobs:
       with:
         repository: mikugirls/dxvk
         fetch-tags: true
-        submodules: true
+        submodules: recursive
         fetch-depth: 16
         path: dxvk
 
