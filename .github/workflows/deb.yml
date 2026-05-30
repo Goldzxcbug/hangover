@@ -110,8 +110,8 @@ jobs:
     - name: get version
       run: git describe --tags | sed "s/hangover-/HOVERSION=/" >> "$GITHUB_ENV"; git describe --tags | sed "s/hangover-/HOVERSION=/"
 
-    - name: get shallow submodule
-      run: git submodule update --init --recursive --depth 1 fex
+    - name: get submodule
+      run: git submodule update --init --recursive fex
 
     - name: Setup packaging
       run: |
@@ -173,8 +173,8 @@ jobs:
     - name: get version
       run: git describe --tags | sed "s/hangover-/HOVERSION=/" >> "$GITHUB_ENV"; git describe --tags | sed "s/hangover-/HOVERSION=/"
 
-    - name: get shallow submodule
-      run: git submodule update --init --recursive --depth 1 fex
+    - name: get submodule
+      run: git submodule update --init --recursive fex
 
     - name: Setup packaging
       run: |
@@ -235,8 +235,8 @@ jobs:
     - name: get version
       run: git describe --tags | sed "s/hangover-/HOVERSION=/" >> "$GITHUB_ENV"; git describe --tags | sed "s/hangover-/HOVERSION=/"
 
-    - name: get shallow submodule
-      run: git submodule update --init --recursive --depth 1 box64
+    - name: get submodule
+      run: git submodule update --init --recursive box64
 
     - name: Setup packaging
       run: |
@@ -356,8 +356,8 @@ jobs:
     - name: get version
       run: git describe --tags | sed "s/hangover-/HOVERSION=/" >> "$GITHUB_ENV"; git describe --tags | sed "s/hangover-/HOVERSION=/"
 
-    - name: get shallow submodule
-      run: git submodule update --init --recursive --depth 1 wine
+    - name: get submodule
+      run: git submodule update --init --recursive wine
 
     - name: Setup packaging
       run: |
@@ -443,8 +443,8 @@ jobs:
     - name: get version
       run: git describe --tags | sed "s/hangover-/HOVERSION=/" >> "$GITHUB_ENV"; git describe --tags | sed "s/hangover-/HOVERSION=/"
 
-    - name: get shallow submodule
-      run: git submodule update --init --recursive --depth 1 wine
+    - name: get submodule
+      run: git submodule update --init --recursive wine
 
     - name: Setup packaging
       run: |
