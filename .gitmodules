@@ -10,3 +10,5 @@
 	path = box64
 	url = https://github.com/ptitSeb/box64.git
 	branch = main
+[submodule "fex/External/rpmalloc"]
+	branch = fex
