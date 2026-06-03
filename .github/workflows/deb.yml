@@ -297,14 +297,19 @@ jobs:
       run: docker image load -i foundationubuntu2204.tgz
 
     - name: get version
-      run: echo DXVKVERSION=$(git -C dxvk describe --abbrev=0) >> "$GITHUB_ENV"; echo DXVKVERSION=$(git -C dxvk describe --abbrev=0)
+      run: |
+        cd dxvk
+        VERSION=$(git describe --abbrev=0 2>/dev/null || echo "2.7.1")
+        echo "DXVKVERSION=$VERSION" >> "$GITHUB_ENV"
+        echo "DXVKVERSION=$VERSION"
+
 
     - name: Setup packaging
       run: |
         cp -r .packaging/ubuntu2204/dxvk/* dxvk
 
     - name: Build package
-      run: cd dxvk; docker build -t dxvk .
+      run: cd dxvk; docker build --build-arg DXVK_VERSION=${{ env.DXVKVERSION }} -t dxvk .
 
     - name: Extract package
       run: docker run --rm dxvk cat /opt/dxvk/output/dxvk-${{ env.DXVKVERSION }}.tar.gz > dxvk-${{ env.DXVKVERSION }}.tar.gz
