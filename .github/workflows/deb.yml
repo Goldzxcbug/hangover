@@ -25,10 +25,10 @@ jobs:
         os: [debian12, debian13, ubuntu2204, ubuntu2404, ubuntu2604]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
     - name: Cache docker image
       id: cache-foundation
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       env:
         cache-name: cache-foundation
       with:
@@ -57,10 +57,10 @@ jobs:
         os: [ubuntu2510, ubuntu2604]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
     - name: Cache docker image
       id: cache-foundation
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       env:
         cache-name: ${{ matrix.os }}-foundation-arm
       with:
@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
     - name: free disk space
       run: |
         sudo swapoff -a
@@ -97,7 +97,7 @@ jobs:
 
     - name: Cache docker image
       id: cache-foundation
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       env:
         cache-name: cache-foundation
       with:
@@ -133,13 +133,13 @@ jobs:
       run: docker run --rm fexpe cat /opt/fex/build/Bin/libwow64fex.dll > libwow64fex.dll
 
     - name: Upload deb as Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hangover-libwow64fex_${{ env.HOVERSION }}_arm64.deb
         path: hangover-libwow64fex_${{ env.HOVERSION }}_arm64.deb
 
     - name: Upload dll as Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: libwow64fex.dll
         path: libwow64fex.dll
@@ -150,7 +150,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
     - name: free disk space
       run: |
         sudo swapoff -a
@@ -160,7 +160,7 @@ jobs:
 
     - name: Cache docker image
       id: cache-foundation
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       env:
         cache-name: cache-foundation
       with:
@@ -196,13 +196,13 @@ jobs:
       run: docker run --rm fexpeec cat /opt/fex/build/Bin/libarm64ecfex.dll > libarm64ecfex.dll
 
     - name: Upload deb as Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hangover-libarm64ecfex_${{ env.HOVERSION }}_arm64.deb
         path: hangover-libarm64ecfex_${{ env.HOVERSION }}_arm64.deb
 
     - name: Upload dll as Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: libarm64ecfex.dll
         path: libarm64ecfex.dll
@@ -212,7 +212,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
     - name: free disk space
       run: |
         sudo swapoff -a
@@ -222,7 +222,7 @@ jobs:
 
     - name: Cache docker image
       id: cache-foundation
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       env:
         cache-name: cache-foundation
       with:
@@ -258,13 +258,13 @@ jobs:
       run: docker run --rm boxpe cat /opt/box64/build/wowbox64-prefix/src/wowbox64-build/wowbox64.dll > wowbox64.dll
 
     - name: Upload deb as Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hangover-wowbox64_${{ env.HOVERSION }}_arm64.deb
         path: hangover-wowbox64_${{ env.HOVERSION }}_arm64.deb
 
     - name: Upload dll as Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: wowbox64.dll
         path: wowbox64.dll
@@ -274,9 +274,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
     - name: Checkout DXVK
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         repository: mikugirls/dxvk
         fetch-tags: true
@@ -286,7 +286,7 @@ jobs:
 
     - name: Cache docker image
       id: cache-foundation
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       env:
         cache-name: cache-foundation
       with:
@@ -315,7 +315,7 @@ jobs:
       run: docker run --rm dxvk cat /opt/dxvk/output/dxvk-${{ env.DXVKVERSION }}.tar.gz > dxvk-${{ env.DXVKVERSION }}.tar.gz
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: dxvk-${{ env.DXVKVERSION }}.tar.gz
         path: dxvk-${{ env.DXVKVERSION }}.tar.gz
@@ -338,7 +338,7 @@ jobs:
             codename: noble
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
     - name: free disk space
       run: |
         sudo swapoff -a
@@ -348,7 +348,7 @@ jobs:
 
     - name: Cache docker image
       id: cache-foundation
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       env:
         cache-name: cache-foundation
       with:
@@ -407,7 +407,7 @@ jobs:
       run: docker run --rm wine${{ matrix.os }} cat /opt/hangover-wine_${{ env.HOVERSION }}~${{ matrix.codename }}_arm64.deb > hangover-wine_${{ env.HOVERSION }}~${{ matrix.codename }}_arm64.deb
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hangover-wine_${{ env.HOVERSION }}~${{ matrix.codename }}_arm64.deb
         path: hangover-wine_${{ env.HOVERSION }}~${{ matrix.codename }}_arm64.deb
@@ -425,7 +425,7 @@ jobs:
             codename: resolute
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
     - name: free disk space
       run: |
         sudo swapoff -a
@@ -435,7 +435,7 @@ jobs:
 
     - name: Cache docker image
       id: cache-foundation
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       env:
         cache-name: ${{ matrix.os }}-foundation-arm
       with:
@@ -494,7 +494,7 @@ jobs:
       run: docker run --rm wine${{ matrix.os }} cat /opt/hangover-wine_${{ env.HOVERSION }}~${{ matrix.codename }}_arm64.deb > hangover-wine_${{ env.HOVERSION }}~${{ matrix.codename }}_arm64.deb
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hangover-wine_${{ env.HOVERSION }}~${{ matrix.codename }}_arm64.deb
         path: hangover-wine_${{ env.HOVERSION }}~${{ matrix.codename }}_arm64.deb
@@ -521,7 +521,7 @@ jobs:
             codename: resolute
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
     - name: free disk space
       run: |
         sudo swapoff -a
@@ -533,31 +533,31 @@ jobs:
       run: git describe --tags | sed "s/hangover-/HOVERSION=/" >> "$GITHUB_ENV"; git describe --tags | sed "s/hangover-/HOVERSION=/"
 
     - name: Download Artifacts 1/5
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         pattern: hangover*${{ matrix.codename }}_arm64.deb
         merge-multiple: true
 
     - name: Download Artifacts 2/5
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         pattern: hangover-libwow64fex*_arm64.deb
         merge-multiple: true
 
     - name: Download Artifacts 3/5
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         pattern: hangover-libarm64ecfex*_arm64.deb
         merge-multiple: true
 
     - name: Download Artifacts 4/5
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         pattern: dxvk*.tar.gz
         merge-multiple: true
 
     - name: Download Artifacts 5/5
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         pattern: hangover-wowbox64*_arm64.deb
         merge-multiple: true
@@ -566,7 +566,7 @@ jobs:
       run: tar -cf hangover_${{ env.HOVERSION }}_${{ matrix.os }}_${{ matrix.codename }}_arm64.tar hangover*${{ matrix.codename }}_arm64.deb hangover-libwow64fex*_arm64.deb hangover-libarm64ecfex*_arm64.deb dxvk*.tar.gz hangover-wowbox64*_arm64.deb
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hangover_${{ env.HOVERSION }}_${{ matrix.os }}_${{ matrix.codename }}_arm64.tar
         path: hangover_${{ env.HOVERSION }}_${{ matrix.os }}_${{ matrix.codename }}_arm64.tar
@@ -574,21 +574,19 @@ jobs:
 
     - name: Upload Artifact as Release Asset
       if: github.event_name == 'release'
-      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: hangover_${{ env.HOVERSION }}_${{ matrix.os }}_${{ matrix.codename }}_arm64.tar
-        asset_name: hangover_${{ env.HOVERSION }}_${{ matrix.os }}_${{ matrix.codename }}_arm64.tar
-        asset_content_type: application/x-tar
+      run: |
+        gh release upload ${{ github.event.release.tag_name }} \
+          hangover_${{ env.HOVERSION }}_${{ matrix.os }}_${{ matrix.codename }}_arm64.tar \
+          --clobber
 
   dllbundle:
     needs: [dxvk, fex-pe, fex-pe-ec, box-pe]
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v5
     - name: free disk space
       run: |
         sudo swapoff -a
@@ -600,19 +598,19 @@ jobs:
       run: git describe --tags | sed "s/hangover-/HOVERSION=/" >> "$GITHUB_ENV"; git describe --tags | sed "s/hangover-/HOVERSION=/"
 
     - name: Download Artifacts 1/3
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         pattern: lib*.dll
         merge-multiple: true
 
     - name: Download Artifacts 2/3
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         pattern: wow*.dll
         merge-multiple: true
 
     - name: Download Artifacts 3/3
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         pattern: dxvk*.tar.gz
         merge-multiple: true
@@ -621,7 +619,7 @@ jobs:
       run: tar -cf hangover_${{ env.HOVERSION }}_dlls.tar dxvk*.tar.gz lib*.dll wow*.dll
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hangover_${{ env.HOVERSION }}_dlls.tar
         path: hangover_${{ env.HOVERSION }}_dlls.tar
@@ -629,11 +627,9 @@ jobs:
 
     - name: Upload Artifact as Release Asset
       if: github.event_name == 'release'
-      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: hangover_${{ env.HOVERSION }}_dlls.tar
-        asset_name: hangover_${{ env.HOVERSION }}_dlls.tar
-        asset_content_type: application/x-tar
+      run: |
+        gh release upload ${{ github.event.release.tag_name }} \
+          hangover_${{ env.HOVERSION }}_dlls.tar \
+          --clobber
