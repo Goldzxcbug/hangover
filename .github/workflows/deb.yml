@@ -88,6 +88,7 @@ jobs:
   foundations-native:
     runs-on: ubuntu-24.04-arm
     strategy:
+      fail-fast: false
       matrix:
         os: [fedora43, arch]
 
@@ -552,6 +553,7 @@ jobs:
     needs: foundations-native
     runs-on: ubuntu-24.04-arm
     strategy:
+      fail-fast: false
       matrix:
         os: [fedora43, arch]
 
@@ -690,6 +692,7 @@ jobs:
     needs: [dxvk, fex-pe, fex-pe-ec, box-pe, wine-native]
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         os: [fedora43, arch]
 

@@ -1,4 +1,4 @@
-FROM archlinux:base-devel
+FROM menci/archlinuxarm:base-devel
 
 ARG LLVMMINGW_DATE=20260505
 ARG LLVMMINGW_NAME=llvm-mingw-$LLVMMINGW_DATE-ucrt-ubuntu-22.04-aarch64
