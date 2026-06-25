@@ -3,7 +3,8 @@ FROM menci/archlinuxarm:base-devel
 ARG LLVMMINGW_DATE=20260505
 ARG LLVMMINGW_NAME=llvm-mingw-$LLVMMINGW_DATE-ucrt-ubuntu-22.04-aarch64
 
-RUN pacman -Syu --noconfirm \
+RUN sed -i 's/^CheckSpace/#CheckSpace/' /etc/pacman.conf && \
+    pacman -Syu --noconfirm \
     autoconf \
     automake \
     bison \
