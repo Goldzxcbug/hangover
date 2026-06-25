@@ -85,6 +85,39 @@ jobs:
       if: ${{ steps.cache-foundation.outputs.cache-hit != 'true' }}
       run: docker image save foundation${{ matrix.os }} | gzip -c > foundation${{ matrix.os }}.tgz
 
+  foundations-native:
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      matrix:
+        os: [fedora43, arch]
+
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+    - name: Cache docker image
+      id: cache-foundation
+      uses: actions/cache@v6
+      env:
+        cache-name: ${{ matrix.os }}-foundation-arm
+      with:
+        path: foundation${{ matrix.os }}.tgz
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(format('.packaging/{0}/Dockerfile', matrix.os)) }}
+        lookup-only: true
+
+    - name: Setup packaging
+      if: ${{ steps.cache-foundation.outputs.cache-hit != 'true' }}
+      run: |
+        cp .packaging/${{ matrix.os }}/Dockerfile .
+
+    - name: Build package
+      if: ${{ steps.cache-foundation.outputs.cache-hit != 'true' }}
+      run: docker build -t foundation${{ matrix.os }} .
+
+    - name: Export docker image
+      if: ${{ steps.cache-foundation.outputs.cache-hit != 'true' }}
+      run: docker image save foundation${{ matrix.os }} | gzip -c > foundation${{ matrix.os }}.tgz
+
 
   fex-pe:
     needs: foundations
@@ -515,6 +548,60 @@ jobs:
         name: hangover-wine_${{ env.HOVERSION }}~${{ matrix.codename }}_arm64.deb
         path: hangover-wine_${{ env.HOVERSION }}~${{ matrix.codename }}_arm64.deb
 
+  wine-native:
+    needs: foundations-native
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      matrix:
+        os: [fedora43, arch]
+
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+    - name: free disk space
+      run: |
+        sudo swapoff -a
+        sudo rm -f /swapfile
+        sudo apt clean
+        df -h
+
+    - name: Cache docker image
+      id: cache-foundation
+      uses: actions/cache@v6
+      env:
+        cache-name: ${{ matrix.os }}-foundation-arm
+      with:
+        path: foundation${{ matrix.os }}.tgz
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(format('.packaging/{0}/Dockerfile', matrix.os)) }}
+
+    - name: Import docker image
+      run: docker image load -i foundation${{ matrix.os }}.tgz
+
+    - name: get version
+      run: git describe --tags | sed "s/hangover-/HOVERSION=/" >> "$GITHUB_ENV"; git describe --tags | sed "s/hangover-/HOVERSION=/"
+
+    - name: get submodule
+      run: git submodule update --init --recursive wine
+
+    - name: Setup packaging
+      run: |
+        cp -r .packaging/${{ matrix.os }}/wine/* wine
+        sed -i "s/HOVERSION/${HOVERSION}/g" wine/Dockerfile
+        nproc
+
+    - name: Build package
+      run: cd wine; docker build -t wine${{ matrix.os }} .
+
+    - name: Extract package
+      run: docker run --rm wine${{ matrix.os }} cat /opt/artifacts/hangover-wine_${{ env.HOVERSION }}_${{ matrix.os }}_aarch64.tar.zst > hangover-wine_${{ env.HOVERSION }}_${{ matrix.os }}_aarch64.tar.zst
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: hangover-wine_${{ env.HOVERSION }}_${{ matrix.os }}_aarch64.tar.zst
+        path: hangover-wine_${{ env.HOVERSION }}_${{ matrix.os }}_aarch64.tar.zst
+
 
   bundle:
     needs: [dxvk, fex-pe, fex-pe-ec, box-pe, wine, wine-arm]
@@ -597,6 +684,70 @@ jobs:
       run: |
         gh release upload ${{ github.event.release.tag_name }} \
           hangover_${{ env.HOVERSION }}_${{ matrix.os }}_${{ matrix.codename }}_arm64.tar \
+          --clobber
+
+  bundle-native:
+    needs: [dxvk, fex-pe, fex-pe-ec, box-pe, wine-native]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [fedora43, arch]
+
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+    - name: free disk space
+      run: |
+        sudo swapoff -a
+        sudo rm -f /swapfile
+        sudo apt clean
+        df -h
+
+    - name: get version
+      run: git describe --tags | sed "s/hangover-/HOVERSION=/" >> "$GITHUB_ENV"; git describe --tags | sed "s/hangover-/HOVERSION=/"
+
+    - name: Download Artifacts 1/4
+      uses: actions/download-artifact@v7
+      with:
+        pattern: hangover-wine*${{ matrix.os }}_aarch64.tar.zst
+        merge-multiple: true
+
+    - name: Download Artifacts 2/4
+      uses: actions/download-artifact@v7
+      with:
+        pattern: dxvk*.tar.gz
+        merge-multiple: true
+
+    - name: Download Artifacts 3/4
+      uses: actions/download-artifact@v7
+      with:
+        pattern: lib*.dll
+        merge-multiple: true
+
+    - name: Download Artifacts 4/4
+      uses: actions/download-artifact@v7
+      with:
+        pattern: wow*.dll
+        merge-multiple: true
+
+    - name: Bundle
+      run: tar -cf hangover_${{ env.HOVERSION }}_${{ matrix.os }}_aarch64.tar hangover-wine*${{ matrix.os }}_aarch64.tar.zst dxvk*.tar.gz lib*.dll wow*.dll
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: hangover_${{ env.HOVERSION }}_${{ matrix.os }}_aarch64.tar
+        path: hangover_${{ env.HOVERSION }}_${{ matrix.os }}_aarch64.tar
+        retention-days: 14
+
+    - name: Upload Artifact as Release Asset
+      if: github.event_name == 'release'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release upload ${{ github.event.release.tag_name }} \
+          hangover_${{ env.HOVERSION }}_${{ matrix.os }}_aarch64.tar \
           --clobber
 
   dllbundle:

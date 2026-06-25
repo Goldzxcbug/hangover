@@ -1,0 +1,90 @@
+FROM fedora:43
+
+ARG LLVMMINGW_DATE=20260505
+ARG LLVMMINGW_NAME=llvm-mingw-$LLVMMINGW_DATE-ucrt-ubuntu-22.04-aarch64
+
+RUN dnf -y update && dnf -y install \
+    autoconf \
+    automake \
+    bison \
+    ca-certificates \
+    clang \
+    cmake \
+    cups-devel \
+    curl \
+    dbus-devel \
+    diffutils \
+    file \
+    findutils \
+    flex \
+    fontconfig-devel \
+    freetype-devel \
+    gcc \
+    gcc-c++ \
+    gettext \
+    git \
+    glib2-devel \
+    gnutls-devel \
+    gstreamer1-devel \
+    gstreamer1-plugins-base-devel \
+    gtk-doc \
+    gzip \
+    hostname \
+    krb5-devel \
+    less \
+    libX11-devel \
+    libXcomposite-devel \
+    libXcursor-devel \
+    libXext-devel \
+    libXfixes-devel \
+    libXi-devel \
+    libXinerama-devel \
+    libXrandr-devel \
+    libXrender-devel \
+    libXt-devel \
+    libXxf86vm-devel \
+    libepoxy-devel \
+    libglvnd-devel \
+    libgphoto2-devel \
+    libpcap-devel \
+    libtool \
+    libunwind-devel \
+    libusb1-devel \
+    libv4l-devel \
+    libxcb-devel \
+    libxkbcommon-devel \
+    libxkbcommon-x11-devel \
+    lld \
+    llvm \
+    m4 \
+    make \
+    mesa-libGL-devel \
+    mesa-libGLU-devel \
+    nano \
+    nasm \
+    ncurses-devel \
+    ninja-build \
+    openldap-devel \
+    openssl-devel \
+    patch \
+    perl \
+    pkgconf-pkg-config \
+    pulseaudio-libs-devel \
+    python3 \
+    python3-setuptools \
+    sane-backends-devel \
+    SDL2-devel \
+    screen \
+    systemd-devel \
+    tar \
+    unixODBC-devel \
+    vulkan-headers \
+    vulkan-loader-devel \
+    wayland-devel \
+    wget \
+    which \
+    xz \
+    zstd && \
+    dnf clean all
+
+RUN cd /opt; wget https://github.com/mstorsjo/llvm-mingw/releases/download/$LLVMMINGW_DATE/$LLVMMINGW_NAME.tar.xz; tar -xJf $LLVMMINGW_NAME.tar.xz; rm *.tar.xz
